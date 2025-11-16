@@ -21,7 +21,7 @@ export function activate(context: ExtensionContext): void {
 						.refresh(context)
 						.then(() => vscodeHelper.window.showReloadMessage())
 						.catch((err: unknown) => {
-							logger.logError(err, "Failed to refresh extension contributions.");
+							logger.logError((err as Error).message, "Failed to refresh extension contributions.");
 
 							vscodeHelper.window.showErrorMessage(
 								"Failed to refresh extension contributions. See logs for details."

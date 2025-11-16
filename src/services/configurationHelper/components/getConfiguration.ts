@@ -1,6 +1,5 @@
 import { extensions } from "vscode";
 import { extensionProperties } from "../../../components/extensionProperties";
-import getCSharpTemplates from "./getCSharpTemplates";
 import gateKeeper from "../../../components/gateKeeper/gateKeeper";
 import vscodeHelper from "../../vscodeHelper/vscodeHelper.service";
 import { createLoggerInstance } from "../../../components/logger/logger";
@@ -21,7 +20,6 @@ export default function (): IConfiguration {
 		extensionPath: formatHelper.getSync("path")(extension.extensionPath),
 		profiles: vscodeHelper.getConfigValue<string[]>("profiles"),
 		paths: vscodeHelper.getConfigValue<string[]>("paths", []),
-		csharpTemplates: getCSharpTemplates(),
 	};
 
 	return configuration;

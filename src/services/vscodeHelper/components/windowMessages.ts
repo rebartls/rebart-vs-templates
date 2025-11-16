@@ -7,6 +7,8 @@ function create(): IVscodeWindowMessages {
 			window.showInformationMessage("Changes detected, please reload the window", "Reload ...").then((x) => {
 				if (x) commands.executeCommand("workbench.action.reloadWindow");
 			}),
+		showInfoMessage: (message: string) => window.showInformationMessage(message).then(),
+		showWarningMessage: (message: string) => window.showWarningMessage(message).then(),
 		showErrorMessage: (message: string) => window.showErrorMessage(message).then(),
 	};
 }

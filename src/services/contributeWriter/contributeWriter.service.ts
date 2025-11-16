@@ -1,7 +1,7 @@
 import { commands, ExtensionContext, workspace } from "vscode";
 import { createLoggerInstance } from "../../components/logger/logger";
-import configurationReader from "../configurationReader/configurationReader.service";
-import getCommandSetup from "./components/getCommandSetup";
+import configurationHelper from "../configurationHelper/configurationHelper.service";
+import getSetup from "./components/getSetup";
 import { IContributeWriter, IPackageConfiguration, MenuDefinition } from "./types";
 import fileHelper from "../fileHelper/fileHelper.service";
 import hasPackagesChanges, { ChangeType } from "./components/hasPackagesChanges";
@@ -10,17 +10,17 @@ import vscodeHelper from "../vscodeHelper/vscodeHelper.service";
 function create(): IContributeWriter {
 	const logger = createLoggerInstance("contributeWriter");
 	const packageFileName = "package.json";
-	const paths = configurationReader.get<string[]>("paths");
-	const profiles = configurationReader.get<string[]>("profiles");
+	const paths = configurationHelper.get<string[]>("paths");
+	const profiles = configurationHelper.get<string[]>("profiles");
 
 	/**
-	 * Adds all available commands with a valid template name from the contributes to the context
+	 * Adds all available commands with a valid template name from the contributes to the context.
 	 *
 	 * Any contribution of the template contributes will be registered even though the selection
-	 * may be not visible for the user (for example when the necessary profile is not active)
+	 * may be not visible for the user (for example when the necessary profile is not active).
 	 **/
 	const addCommandSubscriptions = async (context: ExtensionContext) => {
-		const setup = await getCommandSetup(paths, workspace.workspaceFolders![0].uri.path, profiles);
+		const setup = await getSetup(paths, workspace.workspaceFolders![0].uri.path, profiles);
 
 		for (const command of setup.commands) {
 			context.subscriptions.push(commands.registerCommand(command[0], command[1]));
@@ -38,10 +38,10 @@ function create(): IContributeWriter {
 	 * @param force - if true, the contribution will be updated without any additional check for differences; otherwise the package file is only updated if changes are detected.
 	 */
 	const updateCommandContributionsOfPackage = async (force: boolean = false) => {
-		const extensionPath = configurationReader.get<string>("extensionPath");
+		const extensionPath = configurationHelper.get<string>("extensionPath");
 		const buffer = await fileHelper.readFile(`${extensionPath}/${packageFileName}`);
 		const _package = JSON.parse(fileHelper.readBuffer(buffer!)) as IPackageConfiguration;
-		const setup = await getCommandSetup(paths, workspace.workspaceFolders![0].uri.path, profiles);
+		const setup = await getSetup(paths, workspace.workspaceFolders![0].uri.path, profiles);
 
 		if (!force) {
 			const state = hasPackagesChanges(_package, setup, profiles);
@@ -63,13 +63,15 @@ function create(): IContributeWriter {
 		} else logger.logDebug("Force to update package.json.");
 
 		_package.contributes.commands = setup.contribution.commands;
+		_package.contributes.submenus = setup.contribution.subMenus;
 
 		_package.contributes.menus = {
-			"explorer/context": setup.contribution.menu,
+			"explorer/context": setup.contribution.explorerContext,
+			...setup.contribution.menus,
 		} as MenuDefinition;
 
 		await fileHelper.createFile(extensionPath, packageFileName, _package);
-		console.log("Updated command contributions, please reload the window to apply changes.");
+		logger.log("Updated command contributions, please reload the window to apply changes.");
 		await vscodeHelper.window.showReloadMessage();
 	};
 

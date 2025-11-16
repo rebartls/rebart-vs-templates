@@ -1,81 +1,141 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"type": "object",
-	"required": ["entries"],
+	"required": ["name", "title", "steps"],
 	"definitions": {
-		"group": {
+		"name": {
 			"type": "string",
-			"description": "https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups"
+			"description": "Name of the template."
 		},
-		"when": {
+		"title": {
 			"type": "string",
-			"description": "https://code.visualstudio.com/api/references/when-clause-contexts"
+			"description": "Title of the template visible to the user."
 		},
-		"execute": {
+		"profile": {
 			"type": "string",
-			"description": "Value to execute in the terminal"
+			"description": "Name of the profile of the template."
 		},
-		"input": {
-			"type": "object",
-			"required": ["out", "question", "type"],
-			"properties": {
-				"format": {
-					"type": "string",
-					"examples": ["c#", "path", "pascalCase", "camelCase"],
-					"description": "Value formatter"
-				},
-				"out": {
-					"type": "string",
-					"description": "Name of the variable to add the input value to"
-				},
-				"question": {
-					"type": "string",
-					"description": "Question to ask the user"
-				},
-				"type": {
-					"type": "string",
-					"examples": ["text", "number", "select", "bool"],
-					"description": "Input value type"
-				},
-				"values": {
-					"type": "string"
+		"steps": {
+			"type": "array",
+			"description": "Steps to create and modify the template.",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"inputs": {
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/input"
+						}
+					},
+					"values": {
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/value"
+						}
+					},
+					"outputs": {
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/output"
+						}
+					}
 				}
 			}
 		},
-		"profileConfig": {
+		"input": {
 			"type": "object",
-			"required": ["name", "shortName", "title"],
+			"required": ["type", "question", "name"],
+			"additionalProperties": false,
+			"properties": {
+				"type": {
+					"type": "string",
+					"examples": ["text", "number", "select", "bool"]
+				},
+				"question": {
+					"type": "string",
+					"description": "Question to ask the user."
+				},
+				"name": {
+					"type": "string",
+					"description": "Name of the variable which will be available in the following steps."
+				},
+				"format": {
+					"type": "string",
+					"examples": ["c#", "path", "pascalCase", "camelCase"]
+				},
+				"values": {
+					"type": "array",
+					"description": "Values to select from (only used in type 'select')"
+				},
+				"optional": {
+					"type": "boolean",
+					"description": "If false no error will be thrown if the user doesn't provide any value; otherwise ignores the input. Default is false."
+				}
+			}
+		},
+		"value": {
+			"type": "object",
+			"required": ["name"],
+			"additionalProperties": false,
 			"properties": {
 				"name": {
 					"type": "string",
-					"description": "Name of the profile"
+					"description": "Name of the variable which will be available in the following steps."
 				},
-				"shortName": {
+				"value": {
 					"type": "string",
-					"description": "Unique name of the command"
+					"description": "Static value of the item. Can be constructed with the available variables."
 				},
-				"title": {
+				"format": {
 					"type": "string",
-					"description": "Title of the command visible to the user"
+					"examples": ["path", "pascalCase", "camelCase"]
+				}
+			}
+		},
+		"output": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"folder": {
+					"type": "string",
+					"description": "Name of the folder where the output will be created."
+				},
+				"files": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/outputFile"
+					}
+				},
+				"name": {
+					"type": "string",
+					"description": "Name of the output file."
+				},
+				"file": {
+					"type": "string",
+					"description": "Name of the file where the data is located."
+				}
+			}
+		},
+		"outputFile": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Name of the output file."
+				},
+				"file": {
+					"type": "string",
+					"description": "Name of the file where the data is located."
 				}
 			}
 		}
 	},
 	"properties": {
-		"entries": {
-			"type": "array",
-			"items": {
-				"type": "object",
-				"additionalProperties": false,
-				"properties": {
-					"group": { "$ref": "#/definitions/group" },
-					"input": { "$ref": "#/definitions/input" },
-					"inputs": { "type": "array", "items": { "$ref": "#/definitions/input" } },
-					"when": { "$ref": "#/definitions/when" },
-					"execute": { "$ref": "#/definitions/execute" },
-					"profileConfig": { "$ref": "#/definitions/profileConfig" }
-				}
-			}
-		}
+		"name": { "$ref": "#/definitions/name" },
+		"title": { "$ref": "#/definitions/title" },
+		"profile": { "$ref": "#/definitions/profile" },
+		"steps": { "$ref": "#/definitions/steps" }
 	}
 }

@@ -52,6 +52,52 @@
           "description": "Profiles to use. Uses every available profile if not provided."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "rebart.vs-templates.c#.dto",
+        "title": "Data Transfer Object"
+      },
+      {
+        "command": "rebart.vs-templates.template.configuration",
+        "title": "Create new template configuration"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "group": "navigation@-1",
+          "when": "explorerResourceIsFolder",
+          "submenu": "templates"
+        },
+        {
+          "group": "navigation@-1",
+          "when": "explorerResourceIsFolder",
+          "submenu": "c#-templates"
+        },
+        {
+          "command": "rebart.vs-templates.template.configuration",
+          "group": "2_workspace",
+          "when": "explorerResourceIsFolder"
+        }
+      ],
+      "templates": [],
+      "c#-templates": [
+        {
+          "command": "rebart.vs-templates.c#.dto",
+          "group": "navigation"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "templates",
+        "label": "Default Templates"
+      },
+      {
+        "id": "c#-templates",
+        "label": "C# Templates"
+      }
+    ]
   }
 }

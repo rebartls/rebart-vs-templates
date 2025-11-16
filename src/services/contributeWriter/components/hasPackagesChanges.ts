@@ -1,4 +1,4 @@
-import { ICommandSetup, IPackageConfiguration } from "../types";
+import { IPackageConfiguration, ISetup } from "../types";
 
 export enum ChangeType {
 	NO_CHANGE,
@@ -7,19 +7,27 @@ export enum ChangeType {
 	DIFFERENT_SIZE,
 }
 
-export default function (_package: IPackageConfiguration, setup: ICommandSetup, profiles: string[]): ChangeType {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (!_package.contributes.commands || _package.contributes.commands.length !== setup.contribution.commands.length) {
+export default function (_package: IPackageConfiguration, setup: ISetup, profiles: string[]): ChangeType {
+	if (
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		!_package.contributes.commands ||
+		_package.contributes.commands.length !== setup.contribution.commands.length ||
+		_package.contributes.submenus.length !== setup.contribution.subMenus.length ||
+		// 1 must be added to menus of the setup because these variable doesn't contain the explorer context
+		Object.keys(_package.contributes.menus).length !== Object.keys(setup.contribution.menus).length + 1
+	) {
 		return ChangeType.DIFFERENT_SIZE;
 	}
 
 	for (const entry of _package.contributes.commands) {
-		// todo implement a better profile check logic (e.g. splitting string value by dot and then checking for profile presence)
-		for (const profile of profiles) {
-			// if (entry.command.indexOf(profile) < 0) return ChangeType.UNKNOWN_PROFILE;
+		const commandSplit = entry.command.split(".");
+		const commandProfile = commandSplit[commandSplit.length - 2];
+
+		if (commandProfile !== "template" && profiles.length > 0 && !profiles.find((x) => x === commandProfile)) {
+			return ChangeType.UNKNOWN_PROFILE;
 		}
 
-		if (setup.contribution.commands.findIndex((x) => x.command === entry.command && x.title === entry.title) < 0) {
+		if (!setup.contribution.commands.find((x) => x.command === entry.command && x.title === entry.title)) {
 			return ChangeType.UNKNOWN_COMMAND;
 		}
 	}

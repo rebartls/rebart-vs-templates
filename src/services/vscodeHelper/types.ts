@@ -10,6 +10,8 @@ export interface IExtensionConfiguration {
 
 export interface IVscodeWindowMessages {
 	showReloadMessage(): Thenable<void>;
+	showInfoMessage(message: string): Thenable<void>;
+	showWarningMessage(message: string): Thenable<void>;
 	showErrorMessage(message: string): Thenable<void>;
 }
 

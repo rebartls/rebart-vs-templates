@@ -1,19 +1,30 @@
 import { ExtensionContext } from "vscode";
 
-export interface ICommandSetup {
-	commands: Map<string, (context: { path: string }) => void>;
-	contribution: IContributionSetup;
+export interface IContributeWriter {
+	refresh(context: ExtensionContext): Promise<void>;
+	init(context: ExtensionContext): Promise<void>;
+}
+
+export interface IContributionCommand {
+	command: string;
+	title: string;
+}
+
+export interface IContributionSubmenu {
+	id: string;
+	label: string;
 }
 
 export interface IContributionSetup {
-	commands: ICommand[];
-	menu: IMenuExplorer[];
+	commands: IContributionCommand[];
+	explorerContext: IExplorerContext[];
+	menus: Record<string, IMenu[]>;
+	subMenus: IContributionSubmenu[];
 }
 
-export interface IProfileConfig {
-	name: string;
-	shortName: string;
-	title: string;
+export interface ISetup {
+	commands: Map<string, (context: { path: string }) => void>;
+	contribution: IContributionSetup;
 }
 
 export interface ICommandInput {
@@ -31,18 +42,15 @@ export interface ICommandConfiguration {
 	group: string;
 	when: string;
 	execute: string;
-	profileConfig: IProfileConfig;
+	name: string;
+	profile: string;
+	title: string;
 	inputs?: ICommandInput[];
 }
 
-export interface ICommand {
-	command: string;
-	title: string;
-}
-
-export interface IMenuExplorer {
+export interface IExplorerContext {
 	group: string;
-	when: string;
+	when?: string;
 	submenu?: string;
 	command?: string;
 }
@@ -57,16 +65,12 @@ export interface IPackageConfiguration {
 }
 
 export type MenuDefinition = {
-	"explorer/context": IMenuExplorer[];
+	"explorer/context": IExplorerContext[];
 } & Record<string, IMenu[]>;
 
 export interface IPackageContributes {
-	commands: ICommand[];
+	commands: IContributionCommand[];
 	menus: MenuDefinition;
 	configuration: object;
-}
-
-export interface IContributeWriter {
-	refresh(context: ExtensionContext): Promise<void>;
-	init(context: ExtensionContext): Promise<void>;
+	submenus: IContributionSubmenu[];
 }

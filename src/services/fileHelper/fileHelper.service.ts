@@ -18,10 +18,10 @@ function _fileHelper() {
 
 	return {
 		readBuffer,
-		async createFile<T>(path: string, name: string, content: T) {
+		async createFile(path: string, name: string, content: string | Buffer) {
 			gateKeeper.notUndefined([path, name, content], "Create file properties");
 			await ensurePathIsCreated(path);
-			await writeFile(`${path}/${name}`, JSON.stringify(content, null, 2));
+			await writeFile(`${path}/${name}`, content);
 		},
 		async createFolder(path: string, name: string): Promise<void> {
 			gateKeeper.notUndefined([path, name], "Create folder properties");

@@ -7,29 +7,28 @@ import { createLoggerInstance } from "../../../components/logger/logger";
 
 export default async function (
 	commandConfiguration: ICommandConfiguration,
-	defaultVariables: Record<string, string>,
+	defaultVariables: Map<string, string>,
 	workspacePath: string,
 	context: { path: string }
 ) {
-	const logger = createLoggerInstance(`getCommandWithExecute - ${context.path}`);
+	const logger = createLoggerInstance(`getCommand - ${context.path}`);
 
-	const variables: Record<string, string> = {
-		...defaultVariables,
-		workspacePath,
+	const variables = new Map<string, string>([
+		...defaultVariables.entries(),
+		["workspacePath", workspacePath],
 		// quotes needed to add names with whitespaces (e.g. "/Path With Space/" is "/'Path With Space'/")
-		contextPath: `'${context.path}'`,
-	};
-
-	logger.logDebug(`Preparing to execute command with variables: ${JSON.stringify(variables)}`);
+		["contextPath", `'${context.path}'`],
+	]);
 
 	for (const input of commandConfiguration.inputs ?? []) {
 		const value = await getCommandInputValue(input);
 
-		if (variables[input.out]) throw new Error(`Variable ${input.out} already defined`);
+		if (variables.has(input.out)) throw new Error(`Variable ${input.out} already defined`);
 
-		variables[input.out] = value;
+		variables.set(input.out, value);
 	}
 
+	logger.logDebug(commandConfiguration.execute, "Preparing to execute command with variables");
 	const execute = parseValueWithVariables(commandConfiguration.execute, variables);
 	logger.logDebug(`Executing command: ${execute}`);
 
@@ -37,7 +36,7 @@ export default async function (
 		let terminal = window.activeTerminal;
 
 		if (!terminal) {
-			logger.logDebug("Found not active terminal, try to create a new one.");
+			logger.logDebug("Found no active terminal, try to create a new one.");
 			terminal = window.createTerminal();
 			terminal.show();
 			setTimeout(() => terminal!.shellIntegration?.executeCommand(execute), 500);
