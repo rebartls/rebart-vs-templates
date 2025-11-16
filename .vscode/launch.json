@@ -1,0 +1,13 @@
+{
+	"version": "0.1.0",
+	"configurations": [
+		{
+			"name": "Launch Extension",
+			"type": "extensionHost",
+			"request": "launch",
+			"preLaunchTask": "npm: build",
+			"args": ["--profile-temp", "--extensionDevelopmentPath=${workspaceFolder}"],
+			"outFiles": ["${workspaceFolder}/out/extension.js"]
+		}
+	]
+}

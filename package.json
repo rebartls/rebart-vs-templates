@@ -1,0 +1,57 @@
+{
+  "name": "vs-templates",
+  "description": "",
+  "version": "1.0.0",
+  "publisher": "rebart",
+  "license": "MIT",
+  "main": "out/extension.js",
+  "engines": {
+    "vscode": "^1.98.0"
+  },
+  "scripts": {
+    "clear": "rimraf node_modules dist out",
+    "build": "tsx ./scripts/build",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.4.1",
+    "@types/vscode": "^1.98.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.3.2",
+    "esbuild": "^0.25.1",
+    "eslint": "^9.21.0",
+    "jest": "^29.6.1",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.10.4",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.8.1"
+  },
+  "categories": [
+    "Other",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "Rebart Vscode Templates",
+      "properties": {
+        "rebart.vs-templates.paths": {
+          "type": "array",
+          "description": "Paths where the templates are defined."
+        },
+        "rebart.vs-templates.profiles": {
+          "type": "array",
+          "description": "Profiles to use. Uses every available profile if not provided."
+        }
+      }
+    }
+  }
+}

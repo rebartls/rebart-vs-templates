@@ -1,0 +1,17 @@
+.vscode/**
+node_modules/**
+test/**
+src/**
+dist/**
+__mocks__/**
+scripts/**
+.gitignore
+.prettierrc.mjs
+.vscodeignore
+eslint.config.mjs
+jest.config.ts
+package.backup.json
+pnpm-lock.yaml
+tsconfig.json
+assets/**
+!assets/icon.png

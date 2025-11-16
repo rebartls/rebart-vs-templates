@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "ES2021",
+		"module": "CommonJS",
+		"outDir": "dist",
+		"sourceMap": true,
+		"lib": ["ES2021.String"],
+		"strictNullChecks": true,
+		"types": ["node", "jest"]
+	},
+	"include": ["src"]
+}

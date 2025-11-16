@@ -1,0 +1,81 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"required": ["entries"],
+	"definitions": {
+		"group": {
+			"type": "string",
+			"description": "https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups"
+		},
+		"when": {
+			"type": "string",
+			"description": "https://code.visualstudio.com/api/references/when-clause-contexts"
+		},
+		"execute": {
+			"type": "string",
+			"description": "Value to execute in the terminal"
+		},
+		"input": {
+			"type": "object",
+			"required": ["out", "question", "type"],
+			"properties": {
+				"format": {
+					"type": "string",
+					"examples": ["c#", "path", "pascalCase", "camelCase"],
+					"description": "Value formatter"
+				},
+				"out": {
+					"type": "string",
+					"description": "Name of the variable to add the input value to"
+				},
+				"question": {
+					"type": "string",
+					"description": "Question to ask the user"
+				},
+				"type": {
+					"type": "string",
+					"examples": ["text", "number", "select", "bool"],
+					"description": "Input value type"
+				},
+				"values": {
+					"type": "string"
+				}
+			}
+		},
+		"profileConfig": {
+			"type": "object",
+			"required": ["name", "shortName", "title"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Name of the profile"
+				},
+				"shortName": {
+					"type": "string",
+					"description": "Unique name of the command"
+				},
+				"title": {
+					"type": "string",
+					"description": "Title of the command visible to the user"
+				}
+			}
+		}
+	},
+	"properties": {
+		"entries": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"group": { "$ref": "#/definitions/group" },
+					"input": { "$ref": "#/definitions/input" },
+					"inputs": { "type": "array", "items": { "$ref": "#/definitions/input" } },
+					"when": { "$ref": "#/definitions/when" },
+					"execute": { "$ref": "#/definitions/execute" },
+					"profileConfig": { "$ref": "#/definitions/profileConfig" }
+				}
+			}
+		}
+	}
+}
