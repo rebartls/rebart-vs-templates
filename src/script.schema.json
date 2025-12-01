@@ -1,0 +1,24 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"required": ["name", "type"],
+	"definitions": {
+		"name": {
+			"type": "string",
+			"description": "Name of the template."
+		},
+		"type": {
+			"type": "string",
+			"examples": ["formatter"],
+			"description": "Type of the script. Input and output definitions are dependent to the type."
+		},
+		"path": {
+			"type": "string",
+			"description": "Absolute or relative path to the javascript or typescript script."
+		}
+	},
+	"properties": {
+		"name": { "$ref": "#/definitions/name" },
+		"type": { "$ref": "#/definitions/type" }
+	}
+}

@@ -14,7 +14,7 @@ const formats: Record<Formats, FormatterFunc<string | Promise<string>>> = {
 	camelCase: getCamelCase,
 };
 
-function _formatHelper() {
+function create() {
 	const get = (name: Formats): FormatterFunc<string | Promise<string>> => {
 		logger.logDebug(`Get format '${name}'`);
 		gateKeeper.notUndefined(name, "Format name");
@@ -37,5 +37,5 @@ function _formatHelper() {
 	};
 }
 
-const formatHelper = _formatHelper();
+const formatHelper = create();
 export default formatHelper;

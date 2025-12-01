@@ -47,26 +47,6 @@ function create(): IVscodeService {
 
 			return value ?? defaultValue;
 		},
-		set(key: keyof IExtensionConfiguration, value: unknown, isGlobal = false): void {
-			gateKeeper.notUndefined(key, "Key");
-			gateKeeper.notUndefined(value, "Value");
-
-			if (configuration.has(key)) {
-				logger.logWarn(`Configuration ${key} will be overwritten because its already available`);
-			}
-
-			configuration.update(key, value, isGlobal);
-		},
-		add(key: string, value: unknown, isGlobal = false): void {
-			gateKeeper.notUndefined(key, "Key");
-			gateKeeper.notUndefined(value, "Value");
-
-			if (configuration.has(key)) {
-				logger.logWarn(`Configuration ${key} will be overwritten because its already available`);
-			}
-
-			configuration.update(key, value, isGlobal);
-		},
 	};
 }
 

@@ -70,7 +70,7 @@ function create(): IContributeWriter {
 			...setup.contribution.menus,
 		} as MenuDefinition;
 
-		await fileHelper.createFile(extensionPath, packageFileName, _package);
+		await fileHelper.createFileFrom(extensionPath, packageFileName, _package);
 		logger.log("Updated command contributions, please reload the window to apply changes.");
 		await vscodeHelper.window.showReloadMessage();
 	};

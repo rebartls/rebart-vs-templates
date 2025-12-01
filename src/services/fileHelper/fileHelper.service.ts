@@ -6,7 +6,7 @@ import ensurePathIsCreated from "./components/ensurePathIsCreated";
 import { window } from "vscode";
 import { Stats } from "fs";
 
-function _fileHelper() {
+function create() {
 	const logger = createLoggerInstance("fileHelper");
 
 	const readBuffer = (buffer: Buffer): string => {
@@ -18,6 +18,11 @@ function _fileHelper() {
 
 	return {
 		readBuffer,
+		async createFileFrom<T>(path: string, name: string, content: T) {
+			gateKeeper.notUndefined([path, name, content], "Create file properties");
+			await ensurePathIsCreated(path);
+			await writeFile(`${path}/${name}`, JSON.stringify(content, null, 2));
+		},
 		async createFile(path: string, name: string, content: string | Buffer) {
 			gateKeeper.notUndefined([path, name, content], "Create file properties");
 			await ensurePathIsCreated(path);
@@ -74,5 +79,5 @@ function _fileHelper() {
 	};
 }
 
-const fileHelper = _fileHelper();
+const fileHelper = create();
 export default fileHelper;
