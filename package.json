@@ -5,12 +5,15 @@
 	"publisher": "rebart",
 	"license": "MIT",
 	"main": "out/extension.js",
+	"repository": {
+		"url": "http://rebart-portainer:3000/rebart/vscode-templates"
+	},
 	"engines": {
 		"vscode": "^1.98.0"
 	},
 	"scripts": {
 		"clear": "rimraf node_modules dist out",
-		"build": "tsx ./scripts/build",
+		"build": "tsx ./scripts/runner/build",
 		"package": "vsce package --no-dependencies"
 	},
 	"devDependencies": {
@@ -18,6 +21,7 @@
 		"@types/jest": "^29.5.3",
 		"@types/node": "^20.4.1",
 		"@types/vscode": "^1.98.0",
+		"@types/yargs": "^17.0.35",
 		"@vscode/test-cli": "^0.0.10",
 		"@vscode/test-electron": "^2.4.1",
 		"@vscode/vsce": "^3.3.2",
@@ -30,7 +34,8 @@
 		"ts-node": "^10.9.2",
 		"tsx": "^4.10.4",
 		"typescript": "^5.7.3",
-		"typescript-eslint": "^8.8.1"
+		"typescript-eslint": "^8.8.1",
+		"yargs": "^18.0.0"
 	},
 	"categories": [
 		"Other",

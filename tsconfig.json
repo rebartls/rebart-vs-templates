@@ -8,5 +8,5 @@
 		"strictNullChecks": true,
 		"types": ["node", "jest"]
 	},
-	"include": ["src"]
+	"include": ["src", "scripts"]
 }
